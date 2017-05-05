@@ -21,6 +21,7 @@ public class Prob16 {
 		int N = Integer.parseInt(scan.readLine());
 		while (N-- > 0) {
 			String[] split = scan.readLine().split("[\\:\\s]");
+			
 		}
 		scan.close();
 
