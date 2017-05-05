@@ -2,6 +2,7 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Iterator;
 import java.util.StringTokenizer;
 import java.util.TreeMap;
 import java.util.TreeSet;
@@ -22,17 +23,45 @@ public class Prob14 {
 			return;
 		}
 		int N = Integer.parseInt(scan.readLine());
+		TreeMap<String, TreeSet<String>> catalog = new TreeMap<String, TreeSet<String>>();
+		String start = "";
 		while (N-- > 0) {
-			TreeMap<String, TreeSet<String>> catalog = new TreeMap<String, TreeSet<String>>();
 			StringTokenizer st = new StringTokenizer(scan.readLine(), ",");
 			String a = st.nextToken();
 			String b = st.nextToken();
-			if (b.equals("None") && catalog.containsKey(a)) {
-				
+			if (b.equals("None"))
+				start = a;
+			if (b.equals("None") && !catalog.containsKey(a))
+				catalog.put(a, new TreeSet<String>());
+			if (!b.equals("None")) {
+				TreeSet<String> tree = new TreeSet<String>();
+				if (catalog.containsKey(b))
+					tree = catalog.get(b);
+				tree.add(a);
+				catalog.put(b, tree);
 			}
 		}
+		printLine(start);
+		recur(catalog, start, 1);
 		scan.close();
-
+	}
+	
+	public static void recur(TreeMap<String, TreeSet<String>> catalog, String item, int i) {
+		if (catalog.containsKey(item)) {
+			Iterator<String> iter = catalog.get(item).iterator();
+			while (iter.hasNext()) {
+				String next = iter.next();
+				printLine(dash(i) + next);
+				recur(catalog, next, i + 1);
+			}
+		}
+	}
+	
+	public static String dash(int count) {
+		String out = "";
+		for (int i = 0; i < count; i++)
+			out += "-";
+		return out;
 	}
 	
 	public static void print(Object... obj) {
